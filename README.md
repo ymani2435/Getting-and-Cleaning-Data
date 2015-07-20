@@ -49,7 +49,7 @@ Running the run_analysis.R script
 
 6) source("run_analysis.R") 
 
-How the, run_analysis.R script works
+run_analysis.R script assessment
 ====================================
 Review the run_analysis.R script in the root of the cloned repository.
 
