@@ -16,9 +16,10 @@ Conceptually, this process summarizes the original data by
 2. Grouping the data by the subject and activity 
 3. Averaging all the data for a given subject/activity pairing.
 
-The final dataset is written to "tidydata.txt" and can be read in with the following R command:
+The final dataset is written to "./tidydata/data_set_with_the_averages.txt" and can be read in with the following R command:
 
-    verify <- read.table("tidydata.txt", sep=" ", headers=TRUE)
+    verify <- read.table("./tidydata/data_set_with_the_averages.txt", sep="\t")
+    verfiy
 
 Data Cleaning Description
 ----
