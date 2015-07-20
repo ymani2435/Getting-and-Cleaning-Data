@@ -1,46 +1,155 @@
 Course Project Code Book
 ========================
 
+
+
+Dataset Overview
+
+The original data for this process was collected from a smartphone by a variety of subjects while engaging in several activties. All subjects engaged in all activities. Raw data was gathered from the phone's accelerometer and its gyroscope. The values used in this process were derived by a variety of calculations (described below).
+
 Source of the original data: https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 
 Original description: http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
 
-The attached R script (run_analysis.R) performs the following to clean up the data:
+Conceptually, this process summarizes the original data by 1. Subsetting the data, pulling out only fields which are a mean or a standard deviation 2. Grouping the data by the subject and activity 3. Averaging all the data for a given subject/activity pairing.
 
-* Merges the training and test sets to create one data set, namely train/X_train.txt with test/X_test.txt, the result of which is a 10299x561 data frame, as in the original description ("Number of Instances: 10299" and "Number of Attributes: 561"), train/subject_train.txt with test/subject_test.txt, the result of which is a 10299x1 data frame with subject IDs, and train/y_train.txt with test/y_test.txt, the result of which is also a 10299x1 data frame with activity IDs.
+The final dataset is written to "tidydata.txt" and can be read in with the following R command:
 
-* Reads features.txt and extracts only the measurements on the mean and standard deviation for each measurement. The result is a 10299x66 data frame, because only 66 out of 561 attributes are measurements on the mean and standard deviation. All measurements appear to be floating point numbers in the range (-1, 1).
+verify <- read.table("tidydata.txt", sep=" ", headers=TRUE)
 
-* Reads activity_labels.txt and applies descriptive activity names to name the activities in the data set:
+Data Cleaning Description
+Cleaning data labels
 
-        walking
-        
-        walkingupstairs
-        
-        walkingdownstairs
-        
-        sitting
-        
-        standing
-        
-        laying
+The input labels used abbreviated forms of descriptive terms. Abbreviations were expanded and duplications and punctuation were removed so that "tBodyAccJerk-std()-X" became "timeBodyAccelerometerJerkStdDevX" and "fBodyBodyGyroMag-mean()" became "frequencyBodyGyroscopeMagnitudeMean".
 
-* The script also appropriately labels the data set with descriptive names: all feature names (attributes) and activity names are converted to lower case, underscores and brackets () are removed. Then it merges the 10299x66 data frame containing features with 10299x1 data frames containing activity labels and subject IDs. The result is saved as merged_clean_data.txt, a 10299x68 data frame such that the first column contains subject IDs, the second column activity names, and the last 66 columns are measurements. Subject IDs are integers between 1 and 30 inclusive. The names of the attributes are similar to the following:
+Merging data
 
-        tbodyacc-mean-x 
-        
-        tbodyacc-mean-y 
-        
-        tbodyacc-mean-z 
-        
-        tbodyacc-std-x 
-        
-        tbodyacc-std-y 
-        
-        tbodyacc-std-z 
-        
-        tgravityacc-mean-x 
-        
-        tgravityacc-mean-y
+The data was divided in two different ways. First, it was partioned into train and test subsets. Each of those was then divided into a measurements file, a subject identifier file, and an activity code file. There was also a single activity label file which paired the numeric code to a string label.
 
-* Finally, the script creates a 2nd, independent tidy data set with the average of each measurement for each activity and each subject. The result is saved as tidydata.txt, a 180x68 data frame, where as before, the first column contains subject IDs, the second column contains activity names (see below), and then the averages for each of the 66 attributes are in columns 3...68. There are 30 subjects and 6 activities, thus 180 rows in this data set with averages.
+For each of train and test, the measurements file as read in using the cleaned up columns from above. Then the subject id and activity id were read in and combined (via cbind) with the measurements data. Then the complete train and test sets were merged together with rbind.
+
+Filtering data
+
+From the fully merged data frame, a subset of columns was extracted where the columns indicated a mean or a standard deviation, along with the subject id and activity id. The activity ids were then replaced with corresponding activity labels.
+Summarizing the data
+
+For each subject/activity pair, all the data points for a given column were averaged together and the resultant data frame written to file.
+
+Data Column Description
+
+The first two columns are for identifying the person and the activity they were engaging in for the data collection.
+
+    Subject - Identifier for the subject providing the data, ranging from 1 to 30.
+    Activity - A label for the level activity of a data point. One of "WALKING", "WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS", "SITTING", "STANDING", or "LAYING".
+
+Each subsequent column is an average of values for a give Subject/AcivityLevel in the range -1 to 1. See below for more detail on the variables and their derivation.
+
+The label for each variable is a combination of these facets:
+
+    time, frequency, or angle
+    Body or Gravity
+    Accelerometer or Gyroscope
+    Jerk (or empty)
+    Magnitude (or empty)
+    Mean or StdDev(standard deviation)
+    Freq (or empty)
+    X, Y, or Z axis
+
+Complete list of columns
+
+    Subject
+    Activity
+    timeBodyAccelerometerMeanX
+    timeBodyAccelerometerMeanY
+    timeBodyAccelerometerMeanZ
+    timeGravityAccelerometerMeanX
+    timeGravityAccelerometerMeanY
+    timeGravityAccelerometerMeanZ
+    timeBodyAccelerometerJerkMeanX
+    timeBodyAccelerometerJerkMeanY
+    timeBodyAccelerometerJerkMeanZ
+    timeBodyGyroscopeMeanX
+    timeBodyGyroscopeMeanY
+    timeBodyGyroscopeMeanZ
+    timeBodyGyroscopeJerkMeanX
+    timeBodyGyroscopeJerkMeanY
+    timeBodyGyroscopeJerkMeanZ
+    timeBodyAccelerometerMagnitudeMean
+    timeGravityAccelerometerMagnitudeMean
+    timeBodyAccelerometerJerkMagnitudeMean
+    timeBodyGyroscopeMagnitudeMean
+    timeBodyGyroscopeJerkMagnitudeMean
+    frequencyBodyAccelerometerMeanX
+    frequencyBodyAccelerometerMeanY
+    frequencyBodyAccelerometerMeanZ
+    frequencyBodyAccelerometerMeanFreqX
+    frequencyBodyAccelerometerMeanFreqY
+    frequencyBodyAccelerometerMeanFreqZ
+    frequencyBodyAccelerometerJerkMeanX
+    frequencyBodyAccelerometerJerkMeanY
+    frequencyBodyAccelerometerJerkMeanZ
+    frequencyBodyAccelerometerJerkMeanFreqX
+    frequencyBodyAccelerometerJerkMeanFreqY
+    frequencyBodyAccelerometerJerkMeanFreqZ
+    frequencyBodyGyroscopeMeanX
+    frequencyBodyGyroscopeMeanY
+    frequencyBodyGyroscopeMeanZ
+    frequencyBodyGyroscopeMeanFreqX
+    frequencyBodyGyroscopeMeanFreqY
+    frequencyBodyGyroscopeMeanFreqZ
+    frequencyBodyAccelerometerMagnitudeMean
+    frequencyBodyAccelerometerMagnitudeMeanFreq
+    frequencyBodyAccelerometerJerkMagnitudeMean
+    frequencyBodyAccelerometerJerkMagnitudeMeanFreq
+    frequencyBodyGyroscopeMagnitudeMean
+    frequencyBodyGyroscopeMagnitudeMeanFreq
+    frequencyBodyGyroscopeJerkMagnitudeMean
+    frequencyBodyGyroscopeJerkMagnitudeMeanFreq
+    angletBodyAccelerometerMeangravity
+    angletBodyAccelerometerJerkMeangravityMean
+    angletBodyGyroscopeMeangravityMean
+    angletBodyGyroscopeJerkMeangravityMean
+    angleXgravityMean
+    angleYgravityMean
+    angleZgravityMean
+    timeBodyAccelerometerStdDevX
+    timeBodyAccelerometerStdDevY
+    timeBodyAccelerometerStdDevZ
+    timeGravityAccelerometerStdDevX
+    timeGravityAccelerometerStdDevY
+    timeGravityAccelerometerStdDevZ
+    timeBodyAccelerometerJerkStdDevX
+    timeBodyAccelerometerJerkStdDevY
+    timeBodyAccelerometerJerkStdDevZ
+    timeBodyGyroscopeStdDevX
+    timeBodyGyroscopeStdDevY
+    timeBodyGyroscopeStdDevZ
+    timeBodyGyroscopeJerkStdDevX
+    timeBodyGyroscopeJerkStdDevY
+    timeBodyGyroscopeJerkStdDevZ
+    timeBodyAccelerometerMagnitudeStdDev
+    timeGravityAccelerometerMagnitudeStdDev
+    timeBodyAccelerometerJerkMagnitudeStdDev
+    timeBodyGyroscopeMagnitudeStdDev
+    timeBodyGyroscopeJerkMagnitudeStdDev
+    frequencyBodyAccelerometerStdDevX
+    frequencyBodyAccelerometerStdDevY
+    frequencyBodyAccelerometerStdDevZ
+    frequencyBodyAccelerometerJerkStdDevX
+    frequencyBodyAccelerometerJerkStdDevY
+    frequencyBodyAccelerometerJerkStdDevZ
+    frequencyBodyGyroscopeStdDevX
+    frequencyBodyGyroscopeStdDevY
+    frequencyBodyGyroscopeStdDevZ
+    frequencyBodyAccelerometerMagnitudeStdDev
+    frequencyBodyAccelerometerJerkMagnitudeStdDev
+    frequencyBodyGyroscopeMagnitudeStdDev
+    frequencyBodyGyroscopeJerkMagnitudeStdDev
+
+Data description from source
+
+The features selected for this database come from the accelerometer and gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (tBodyAcc-XYZ and tGravityAcc-XYZ) using another low pass Butterworth filter with a corner frequency of 0.3 Hz.
+
+Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerk-XYZ and tBodyGyroJerk-XYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag).
+
+Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAcc-XYZ, fBodyAccJerk-XYZ, fBodyGyro-XYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals).
