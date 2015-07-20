@@ -11,7 +11,10 @@ Source of the original data: https://d396qusza40orc.cloudfront.net/getdata%2Fpro
 
 Original description: http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
 
-Conceptually, this process summarizes the original data by 1. Subsetting the data, pulling out only fields which are a mean or a standard deviation 2. Grouping the data by the subject and activity 3. Averaging all the data for a given subject/activity pairing.
+Conceptually, this process summarizes the original data by 
+1. Subsetting the data, pulling out only fields which are a mean or a standard deviation 
+2. Grouping the data by the subject and activity 
+3. Averaging all the data for a given subject/activity pairing.
 
 The final dataset is written to "tidydata.txt" and can be read in with the following R command:
 
@@ -25,9 +28,9 @@ The input labels used abbreviated forms of descriptive terms. Abbreviations were
 
 ### Merging data
 
-The data was divided in two different ways. First, it was partioned into train and test subsets. Each of those was then divided into a measurements file, a subject identifier file, and an activity code file. There was also a single activity label file which paired the numeric code to a string label.
+The data was divided in two different sets. First, it was partioned into train and test subsets. Each of those was then divided into a measurements file, a subject identifier file, and an activity code file. There was also a single activity label file which paired the numeric code to a string label.
 
-For each of train and test, the measurements file as read in using the cleaned up columns from above. Then the subject id and activity id were read in and combined (via cbind) with the measurements data. Then the complete train and test sets were merged together with rbind.
+For each of train and test data set, the measurements file as read in using the cleaned up columns from above. Then the subject id and activity id were read in and combined (via cbind) with the measurements data. Then the complete train and test sets were merged together with rbind.
 
 ### Filtering data
 
