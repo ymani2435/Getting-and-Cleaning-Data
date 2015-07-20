@@ -15,9 +15,9 @@ run_analysis.R code should execute the following:
 
  Addtional instruction
  
- Please upload the tidy data set created in step 5 of the instructions. 
+ * Please upload the tidy data set created in step 5 of the instructions. 
 
- Please upload your data set as a txt file created with write.table() using row.name=FALSE 
+ * Please upload your data set as a txt file created with write.table() using row.name=FALSE 
  (do not cut and paste a dataset directly into the text box, as this may cause errors saving your submission).
 
 Repository structure
