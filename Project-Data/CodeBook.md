@@ -15,7 +15,7 @@ Conceptually, this process summarizes the original data by 1. Subsetting the dat
 
 The final dataset is written to "tidydata.txt" and can be read in with the following R command:
 
-verify <- read.table("tidydata.txt", sep=" ", headers=TRUE)
+    verify <- read.table("tidydata.txt", sep=" ", headers=TRUE)
 
 Data Cleaning Description
 ----
