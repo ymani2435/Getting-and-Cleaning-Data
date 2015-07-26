@@ -41,25 +41,7 @@ From the fully merged data frame, a subset of columns was extracted where the co
 
 For each subject/activity pair, all the data points for a given column were averaged together and the result data frame written to file.
 
-Data Column Description
-----
-The first two columns are for identifying the person and the activity they were engaging in for the data collection.
 
-    Subject - Identifier for the subject providing the data, ranging from 1 to 30.
-    Activity - A label for the level activity of a data point. One of "WALKING", "WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS", "SITTING", "STANDING", or "LAYING".
-
-Each subsequent column is an average of values for a give Subject/AcivityLevel in the range -1 to 1. See below for more detail on the variables and their derivation.
-
-The label for each variable is a combination of these facets:
-
-    time, frequency, or angle
-    Body or Gravity
-    Accelerometer or Gyroscope
-    Jerk (or empty)
-    Magnitude (or empty)
-    Mean or StdDev(standard deviation)
-    Freq (or empty)
-    X, Y, or Z axis
 
 #Output Variables
 
@@ -145,15 +127,25 @@ In case of three axial measurements, the last part of the variable defines the a
 
 #Output Variable Units
 
-* subject: identifier of an observed volunteer within an age bracket of 19-48 years.
-    * Data type: Numeric
-    * Value range: 1 - 30
-* activity: Label string of the observed activity a person was performing
-    * Data type: factor
-    * Labels: WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING
-* Rows 3 - 68: Means of selected features per subject and activity
-    * Data type: The feature means have the same units as their input data. Due to the normalization they do not have units attached
-    * Value range: [-1, 1]
+Data Column Description
+----
+The first two columns are for identifying the person and the activity they were engaging in for the data collection.
+
+    Subject - Identifier for the subject providing the data, ranging from 1 to 30.
+    Activity - A label for the level activity of a data point. One of "WALKING", "WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS", "SITTING", "STANDING", or "LAYING".
+
+Each subsequent column is an average of values for a give Subject/AcivityLevel in the range -1 to 1. See below for more detail on the variables and their derivation.
+
+The label for each variable is a combination of these facets:
+
+    time, frequency, or angle
+    Body or Gravity
+    Accelerometer or Gyroscope
+    Jerk (or empty)
+    Magnitude (or empty)
+    Mean or StdDev(standard deviation)
+    Freq (or empty)
+    X, Y, or Z axis
 
 #Tidy Data
 
@@ -163,7 +155,7 @@ The tidy data set contains :
 * Activity : Activity label: Walking, Walking Upstairs, Walking Downstairs, Sitting, Standing, Laying
 * Mean of all other variables are measurement collected from the accelerometer and gyroscope 3-axial raw signal (numeric value)
 
-The data set is written to the file 'tidydata.txt'.
+The data set is written to the file 'data_set_with_the_averages.txt' and stored in tidaydata folder.
 The tidy data set a set of variables for each activity and each subject. 10299 instances are split into 180 groups (30 subjects and 6 activities) and 66 mean and standard deviation features are averaged for each group. The resulting data table has 180 rows and 69 columns – 33 Mean variables + 33 Standard deviation variables + 1 Subject( 1 of of the 30 test subjects) + ActivityName + ActivityNum . The tidy data set’s first row is the header containing the names for each column.
 
 
